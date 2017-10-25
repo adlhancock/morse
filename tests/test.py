@@ -4,7 +4,10 @@ Created on Wed Oct 25 22:04:28 2017
 
 @author: David
 """
+import sys
 
-import morse.transmit as t
+#if '.' not in sys.path: sys.path.append('.')
+#print(sys.path)
+#from morse import transmit as t
 
-t.dit()
+#t.dit()
