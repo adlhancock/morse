@@ -1,3 +1,4 @@
+#! /usr/bin/python3
 # -*- coding: utf-8 -*-
 """
 Created on Tue Oct 24 17:17:46 2017
@@ -7,9 +8,14 @@ Created on Tue Oct 24 17:17:46 2017
 
 import os
 import platform
-import winsound
+
 import time
 from time import sleep as wait
+
+if platform.system() is 'Windows':
+    import winsound
+
+#from tkinter import tk
 
 
 wpm = 15
@@ -73,7 +79,7 @@ def sendstring(string,morse,verbose=True):
 
 if __name__ is '__main__':
     morse = import_morse()
-    #signal = "Paris"
-    signal = fromfile('./testsignal.txt')
+    signal = "Paris"
+    #signal = fromfile('./testsignal.txt')
     sendstring(signal,morse)
     
