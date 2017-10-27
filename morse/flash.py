@@ -53,7 +53,7 @@ class Morse(tk.Frame):
                                 command=self.quit)
         
         self.flashButton = tk.Button(self,
-                                     text='Flash\n(Right Shift)',
+                                     text='Flash\n(Right Ctrl)',
                                      width=15,
                                      height=5)
                                      
