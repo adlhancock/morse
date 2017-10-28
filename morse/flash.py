@@ -14,12 +14,21 @@ from itertools import cycle
 
 ditlength = 0.15 # seconds
 
-class Morse(tk.Frame):
+class Signal():
+    def __init__(self):
+        self.morse = ''
+        self.plaintext = ''
+        self.timelog = ''
+
+class MorseApp(tk.Frame):
     def __init__(self,master=None):
         self.ontime = time.time()
         self.offtime = time.time()
-        self.timelog = ''
-        self.character=''
+        self.signal = Signal()
+        self.morsecharacter=''
+        self.morseword=''
+        self.plaincharacter=''
+        self.plainword=''
                 
         tk.Frame.__init__(self,master)
         self.grid()
@@ -32,13 +41,23 @@ class Morse(tk.Frame):
         self.timestring = tk.StringVar()
         self.plainstring = tk.StringVar()
         self.morsestring = tk.StringVar()
-        self.text = tk.Label(self,
+        self.morsebox = tk.Label(self,
                             width=50,
-                            height=5,
+                            height=3,
                             bg='white',
-                            textvariable=self.timestring
+                            textvariable=self.morsestring
                             )
-                            
+        self.plainbox = tk.Label(self,
+                            width=50,
+                            height=3,
+                            bg='white',
+                            textvariable=self.plainstring
+                            )
+        self.timebox = tk.Label(self,
+                            width=20,
+                            height=1,
+                            #bg='red',
+                            textvariable=self.timestring
         self.light = tk.Canvas(self,
                                 width=200,
                                 height=200,)
@@ -62,15 +81,16 @@ class Morse(tk.Frame):
                               self.lighton)
         self.flashButton.bind("<ButtonRelease>",
                               self.lightoff)
-        self.flashButton.bind('<KeyPress-Control_R>',self.lighton)
-        self.flashButton.bind('<KeyRelease-Control_R>',self.lightoff)
+        self.flashButton.bind('<KeyPress-space>',self.lighton)
+        self.flashButton.bind('<KeyRelease-space>',self.lightoff)
         self.flashButton.bind('<Escape>',lambda _: self.quit())
         self.quitButton.bind('<Escape>',lambda _: self.quit())
         ## arrange widgets
-        self.text.grid(row=0,column=0,columnspan=2)        
-        self.light.grid(row=1,column=0,columnspan=2)
-        self.quitButton.grid(row=2,column=0)        
-        self.flashButton.grid(row=2,column=1)
+        self.light.grid(row=0,column=0,columnspan=2)
+        self.morsebox.grid(row=1,column=0,columnspan=2)
+        self.plainbox.grid(row=2,column=0,columnspan=2)
+        self.quitButton.grid(row=3,column=0)        
+        self.flashButton.grid(row=3,column=1)
         self.flashButton.focus_force()
                               
     def lighton(self,event):
@@ -84,8 +104,7 @@ class Morse(tk.Frame):
         self.light.itemconfig(self.bulb,fill='yellow')
 
         # append the time log
-        self.timelog+="{:.2f}\t".format(self.timeoff)
-        #self.timestring.set('Off for: {:5.3f}'.format(self.timeoff))
+        self.signal.timelog+="{:.2f}\t".format(self.timeoff)
         
 
     def lightoff(self,event):
@@ -99,21 +118,26 @@ class Morse(tk.Frame):
         if self.timeon > ditlength: symbol='-'
         else: symbol='.'
 
-        # append the current character or start a new one
-        if self.timeoff > 3*ditlength: self.character = symbol
-        else: self.character+=symbol
+        # append the current character or start a new character or word
+		if self.timeoff > 7*ditlength:  # start a new word
+				self.signal.morse+=' '
+        elif self.timeoff > 3*ditlength: # start a new character
+                self.signal.morse += self.morsecharacter
+                #self.plaincharacter = morse_to_plain(self.morsecharacter)
+				self.morsecharacter = symbol 
+        else: self.character+=symbol # append the current character
 
         # turn the light off
         self.light.itemconfig(self.bulb,fill='grey')
 
         # append the time log       
-        self.timelog+="{:.2f}\n".format(self.timeon)
+        self.signal.timelog+="{:.2f}\n".format(self.timeon)
 
         
         # display the flash duration and interpretation
-        self.timestring.set('On for: {:5.3f}\n{}'.format(self.timeon,
-                                                         self.character))
+        self.timestring.set('On for: {:5.3f}'.format(self.timeon))
+        self.morsestring.set(self.signal.morse)
+        self.plainstring.set(self.signal.plaintext)
 
-app = Morse()
-
+app = MorseApp()
 app.mainloop()
