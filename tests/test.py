@@ -1,13 +1,5 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Oct 25 22:04:28 2017
+from morse import morse
 
-@author: David
-"""
-import sys
+codestring = ".... . ..-. ..-. ---"
 
-#if '.' not in sys.path: sys.path.append('.')
-#print(sys.path)
-#from morse import transmit as t
-
-#t.dit()
+print(morse.code2text(codestring))
