@@ -1,6 +1,6 @@
 #! /usr/bin/python3
 # -*- coding: utf-8 -*-
-"""
+"""transmit.py
 Created on Tue Oct 24 17:17:46 2017
 
 @author: David
