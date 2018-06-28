@@ -13,6 +13,8 @@ from morse.newsticker import get_news
 from morse.morse import translate
 from morse.morse import morsetowav
 
+import winsound
+
 #%%
 news = get_news()
 
@@ -27,6 +29,8 @@ print("RETRANSLATION CHECK:\n"+"*"*50)
 [print(x.upper()+"\n"+y+"\n") for x,y in zip(plain_titles,retranslated_titles)]
 
 #%%
-print("recording title...")
-morsetowav(morse_titles[-1],"news.wav")
-print("done")
+
+morsetowav(morse_titles[-1],"news.wav",verbose=True)
+
+
+
