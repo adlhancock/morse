@@ -51,8 +51,10 @@ z,--..
 ',.---.
 -,-....-
 """
-    
 
+import numpy as np
+import wave
+import struct
 
 def translate(sourcestring,mode="plain"):
 
@@ -81,6 +83,34 @@ def translate(sourcestring,mode="plain"):
         except:
             outstring+="*"
     return outstring
+
+def sound(morsestring,outfile,ditlength=60,frequency=220,framerate=44100):
+    t = ditlength*100
+    f = frequency
+    
+    on = lambda x: list(100*np.sin(np.arange(x)*f))
+    off = lambda x: list(0*np.arange(x))
+    
+    dit = on(t)+off(t)
+    dah = on(3*t)+off(t)
+    letterspace = off(3*t)
+    wordspace = off(7*t)
+    
+    d = {".":dit,
+         "-":dah,
+         " ":letterspace,
+         "/":wordspace
+         }
+    
+    with wave.open(outfile,"wb") as wave_output:
+        wave_output.setparams((2,2,framerate,0,'NONE','not compressed'))
+        
+        for char in "//"+morsestring:
+            sound = d[char]
+            for j in sound:
+                value = int(j)
+                packed_value = struct.pack('h',value)
+                wave_output.writeframes(packed_value)
 
 if __name__ == "__main__":
     morse = translate("Hello world:")
