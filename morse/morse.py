@@ -55,7 +55,7 @@ z,--..
 import numpy as np
 import wave
 import struct
-
+#%%
 def translate(sourcestring,mode="plain"):
 
     code = [x.strip().split(",") for x in morsecode.strip().split("\n")]
@@ -83,8 +83,14 @@ def translate(sourcestring,mode="plain"):
         except:
             outstring+="*"
     return outstring
-
-def sound(morsestring,outfile,ditlength=60,frequency=220,framerate=44100):
+#%%
+def morsetowav(morsestring,
+          outfile,
+          ditlength=60,
+          frequency=220,
+          framerate=44100,
+          verbose = True):
+    
     t = ditlength*100
     f = frequency
     
@@ -102,16 +108,23 @@ def sound(morsestring,outfile,ditlength=60,frequency=220,framerate=44100):
          "/":wordspace
          }
     
+    if verbose is True: print("Opening file...")
+    
     with wave.open(outfile,"wb") as wave_output:
         wave_output.setparams((2,2,framerate,0,'NONE','not compressed'))
         
-        for char in "//"+morsestring:
+        for char in "//"+morsestring+"//":
+    
+            if verbose is True: print(char,end="")
+            
             sound = d[char]
             for j in sound:
                 value = int(j)
                 packed_value = struct.pack('h',value)
                 wave_output.writeframes(packed_value)
-
+    
+    if verbose is True: print("\nComplete!")
+#%%
 if __name__ == "__main__":
     morse = translate("Hello world:")
     print(morse)
