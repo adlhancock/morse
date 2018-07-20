@@ -29,17 +29,17 @@ print("retranslating morse titles to plaintext")
 retranslated_titles = [translate(x,"morse") for x in morse_titles]
 
 response = input("print morse headlines [Y/n] ")
-if response in ["Y",""]:
+if response.upper() in ["Y",""]:
     print("MORSE HEADLINES\n"+"*"*50)
-    [print(translate(x)+"\n"+"="*50+"\n") for x in morse_titles]
+    [print(x.upper()+"\n"+y+"\n") for x,y in zip(plain_titles,morse_titles)]
 
 
-response = input("print retranslation check [Y/n] ")
-if response in ["Y",""]:
+response = input("print retranslation check [y/N] ")
+if response.upper() in ["Y"]:
     print("RETRANSLATION CHECK:\n"+"*"*50)
     [print(x.upper()+"\n"+y+"\n") for x,y in zip(plain_titles,retranslated_titles)]
 
-response = input("record wav file [Y/n] ")
-if response in ["Y",""]:
+response = input("record wav file [y/N] ")
+if response.upper() in ["Y"]:
     morsetowav(morse_titles[-1],"news.wav",verbose=True)
 
