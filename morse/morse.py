@@ -55,10 +55,13 @@ z,--..
 import numpy as np
 import wave
 import struct
+
 #%%
 def translate(sourcestring,mode="plain"):
 
+    # import morse code dictionary string
     code = [x.strip().split(",") for x in morsecode.strip().split("\n")]
+    # set up the dictionary with some extra symbols 
     dictionary               = {}
     dictionary["plain"]      = {plain.upper():morse+" " for plain,morse in code}
     dictionary["plain"][" "] ="/ "
@@ -69,6 +72,7 @@ def translate(sourcestring,mode="plain"):
     dictionary["morse"][".-.-"] = "\n"
     dictionary["morse"]["--..--"] = ","
     
+    # tidy up the input string and make it a list for comprehension
     if mode is "morse":
         sourcecode = sourcestring.upper().strip().split(" ")
     elif mode is "plain":
@@ -76,6 +80,7 @@ def translate(sourcestring,mode="plain"):
     else:
         raise ValueError
     
+    # run through the input list, converting by character
     outstring=''
     for char in sourcecode:
         try: 
@@ -83,14 +88,26 @@ def translate(sourcestring,mode="plain"):
         except:
             outstring+="*"
     return outstring
+
 #%%
 def morsetowav(morsestring,
-          outfile,
-          ditlength=60,
-          frequency=220,
-          framerate=44100,
-          verbose = True):
+              outfile,
+              ditlength=60,
+              frequency=220,
+              framerate=44100,
+              verbose = True):
+    """ turns a string of . and - into a morse code .wav file
     
+    Keyword arguments:
+    morsestring -- string to be converted
+    ditlength -- length of "dit" in ms, 
+    frequency -- tone frequency in Hz
+    framerate -- wav framerate in Hz
+    verbose -- tells you which letter is currently being encoded
+
+    ..note:: the output will be big!
+
+    """
     t = ditlength*100
     f = frequency
     
