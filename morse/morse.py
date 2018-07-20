@@ -125,11 +125,11 @@ def morsetowav(morsestring,
          "/":wordspace
          }
     
-    if verbose is True: print("Opening file...")
+    if verbose is True: print("Opening {}...".format(outfile))
     
     with wave.open(outfile,"wb") as wave_output:
         wave_output.setparams((2,2,framerate,0,'NONE','not compressed'))
-        
+        if verbose is True: print("starting encoding...")
         for char in "//"+morsestring+"//":
     
             if verbose is True: print(char,end="")
@@ -143,10 +143,9 @@ def morsetowav(morsestring,
     if verbose is True: print("\nComplete!")
 #%%
 if __name__ == "__main__":
-    morse = translate("Hello world:")
-    print(morse)
-    
+    plain = "Hello world"
+    print("input string = {}".format(plain))
+    morse = translate(plain)
+    print("translated to morse = {}".format(morse))
     recoded = translate(morse, "morse")
-    print(recoded)
-    
-    #print(morsecode)
+    print("translated back to plaintext = {}".format(recoded))
